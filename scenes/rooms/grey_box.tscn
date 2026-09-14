@@ -1,0 +1,120 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scenes/rooms/pogo_target.gd" id="2_target"]
+
+[sub_resource type="RectangleShape2D" id="Shape_floor"]
+size = Vector2(640, 32)
+
+[sub_resource type="RectangleShape2D" id="Shape_wall"]
+size = Vector2(32, 360)
+
+[sub_resource type="RectangleShape2D" id="Shape_platform_low"]
+size = Vector2(96, 16)
+
+[sub_resource type="RectangleShape2D" id="Shape_platform_high"]
+size = Vector2(96, 16)
+
+[sub_resource type="RectangleShape2D" id="Shape_target"]
+size = Vector2(24, 24)
+
+[sub_resource type="RectangleShape2D" id="Shape_target_wide"]
+size = Vector2(80, 16)
+
+[node name="GreyBox" type="Node2D"]
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(320, 344)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("Shape_floor")
+
+[node name="ColorRect" type="ColorRect" parent="Floor"]
+offset_left = -320.0
+offset_top = -16.0
+offset_right = 320.0
+offset_bottom = 16.0
+color = Color(0.35, 0.35, 0.38, 1)
+
+[node name="WallLeft" type="StaticBody2D" parent="."]
+position = Vector2(16, 180)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallLeft"]
+shape = SubResource("Shape_wall")
+
+[node name="ColorRect" type="ColorRect" parent="WallLeft"]
+offset_left = -16.0
+offset_top = -180.0
+offset_right = 16.0
+offset_bottom = 180.0
+color = Color(0.35, 0.35, 0.38, 1)
+
+[node name="WallRight" type="StaticBody2D" parent="."]
+position = Vector2(624, 180)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallRight"]
+shape = SubResource("Shape_wall")
+
+[node name="ColorRect" type="ColorRect" parent="WallRight"]
+offset_left = -16.0
+offset_top = -180.0
+offset_right = 16.0
+offset_bottom = 180.0
+color = Color(0.35, 0.35, 0.38, 1)
+
+[node name="PlatformLow" type="StaticBody2D" parent="."]
+position = Vector2(200, 280)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformLow"]
+shape = SubResource("Shape_platform_low")
+
+[node name="ColorRect" type="ColorRect" parent="PlatformLow"]
+offset_left = -48.0
+offset_top = -8.0
+offset_right = 48.0
+offset_bottom = 8.0
+color = Color(0.45, 0.45, 0.5, 1)
+
+[node name="PlatformHigh" type="StaticBody2D" parent="."]
+position = Vector2(500, 200)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformHigh"]
+shape = SubResource("Shape_platform_high")
+
+[node name="ColorRect" type="ColorRect" parent="PlatformHigh"]
+offset_left = -48.0
+offset_top = -8.0
+offset_right = 48.0
+offset_bottom = 8.0
+color = Color(0.45, 0.45, 0.5, 1)
+
+[node name="TargetBlock" type="StaticBody2D" parent="." groups=["pogoable"]]
+position = Vector2(360, 316)
+script = ExtResource("2_target")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TargetBlock"]
+shape = SubResource("Shape_target")
+
+[node name="ColorRect" type="ColorRect" parent="TargetBlock"]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
+color = Color(0.85, 0.4, 0.3, 1)
+
+[node name="TargetStrip" type="StaticBody2D" parent="." groups=["pogoable"]]
+position = Vector2(500, 320)
+script = ExtResource("2_target")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TargetStrip"]
+shape = SubResource("Shape_target_wide")
+
+[node name="ColorRect" type="ColorRect" parent="TargetStrip"]
+offset_left = -40.0
+offset_top = -8.0
+offset_right = 40.0
+offset_bottom = 8.0
+color = Color(0.85, 0.4, 0.3, 1)
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector2(80, 300)
