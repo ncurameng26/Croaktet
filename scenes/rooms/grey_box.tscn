@@ -1,7 +1,9 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scenes/rooms/pogo_target.gd" id="2_target"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/instrument_station.tscn" id="3_station"]
+[ext_resource type="Script" path="res://scenes/rooms/hud.gd" id="4_hud"]
 
 [sub_resource type="RectangleShape2D" id="Shape_floor"]
 size = Vector2(640, 32)
@@ -116,5 +118,40 @@ offset_right = 40.0
 offset_bottom = 8.0
 color = Color(0.85, 0.4, 0.3, 1)
 
+[node name="StationDrum" parent="." instance=ExtResource("3_station")]
+position = Vector2(60, 316)
+instrument_script_path = "res://scripts/instruments/drum_attack.gd"
+tint = Color(0.95, 0.55, 0.2, 1)
+label_text = "Drum"
+
+[node name="StationTrumpet" parent="." instance=ExtResource("3_station")]
+position = Vector2(110, 316)
+instrument_script_path = "res://scripts/instruments/trumpet_attack.gd"
+tint = Color(0.95, 0.85, 0.25, 1)
+label_text = "Trumpet"
+
+[node name="StationBass" parent="." instance=ExtResource("3_station")]
+position = Vector2(160, 316)
+instrument_script_path = "res://scripts/instruments/bass_attack.gd"
+tint = Color(0.3, 0.55, 0.95, 1)
+label_text = "Bass"
+
+[node name="StationFlute" parent="." instance=ExtResource("3_station")]
+position = Vector2(210, 316)
+instrument_script_path = "res://scripts/instruments/flute_attack.gd"
+tint = Color(0.7, 0.4, 0.9, 1)
+label_text = "Flute"
+
 [node name="Player" parent="." instance=ExtResource("1_player")]
 position = Vector2(80, 300)
+
+[node name="HUD" type="CanvasLayer" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("4_hud")
+player = NodePath("../Player")
+
+[node name="Label" type="Label" parent="HUD"]
+offset_left = 8.0
+offset_top = 6.0
+offset_right = 200.0
+offset_bottom = 24.0
+text = "Instrument: Drum"
