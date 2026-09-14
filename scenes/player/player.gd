@@ -4,6 +4,9 @@
 class_name Player
 extends CharacterBody2D
 
+## Fired after equip() swaps the instrument. The HUD listens.
+signal instrument_changed(instrument: AttackBase)
+
 @export var run_speed := 120.0
 @export var jump_velocity := -260.0
 @export var gravity_rise := 900.0
@@ -13,8 +16,9 @@ extends CharacterBody2D
 @export var coyote_time := 0.1
 @export var jump_buffer_time := 0.1
 
-## The equipped instrument. Swapping instruments later means swapping this node.
+## The equipped instrument. equip() replaces this node at runtime.
 @onready var instrument: AttackBase = $Instrument
+@onready var _body: ColorRect = $Body
 
 var facing := 1.0          # 1 = right, -1 = left
 var _coyote_left := 0.0
@@ -71,6 +75,27 @@ func _physics_process(delta: float) -> void:
 		instrument.start_pogo()
 
 	move_and_slide()
+
+
+## Swap the equipped instrument for a new one built from instrument_script.
+## Safe to call from a physics signal via call_deferred; it changes the tree.
+func equip(instrument_script: GDScript, tint: Color = Color.WHITE) -> void:
+	if instrument != null and instrument.get_script() == instrument_script:
+		return  # already holding this one
+
+	if instrument != null:
+		instrument.pogo_hit.disconnect(_on_pogo_hit)
+		instrument.name = "OldInstrument"  # free the name for the new node
+		instrument.queue_free()
+
+	var new_instrument: AttackBase = instrument_script.new()
+	new_instrument.name = "Instrument"
+	new_instrument.scale.x = facing
+	add_child(new_instrument)
+	new_instrument.pogo_hit.connect(_on_pogo_hit)
+	instrument = new_instrument
+	_body.color = tint
+	instrument_changed.emit(instrument)
 
 
 func _on_pogo_hit(_target: Node) -> void:
